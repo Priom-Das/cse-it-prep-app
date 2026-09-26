@@ -566,13 +566,14 @@ class _LectureListScreenState extends State<LectureListScreen> {
     _fetchLectures();
   }
 
-  // English Comment: Retrieve all lecture items matching the selected subject.
+// English Comment: Retrieve all lecture items matching the selected subject serially by ID.
   Future<void> _fetchLectures() async {
     try {
       final response = await _supabase
           .from('lecture_materials')
           .select()
-          .eq('subject', widget.subjectName);
+          .eq('subject', widget.subjectName)
+          .order('id', ascending: true); // English Comment: Added ordering by ID to maintain sequence.
 
       setState(() {
         _lectures = List<Map<String, dynamic>>.from(response as List);
@@ -589,7 +590,6 @@ class _LectureListScreenState extends State<LectureListScreen> {
       }
     }
   }
-
   // English Comment: Directly launch PDF URL in external browser or system viewer
   Future<void> _openPdfDirectly(String pdfUrl) async {
     final Uri url = Uri.parse(pdfUrl);
